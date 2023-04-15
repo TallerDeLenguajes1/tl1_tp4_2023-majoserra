@@ -13,11 +13,14 @@ struct Tarea {
     int Duracion; // entre 10 – 100
 };
 
+void mostrar(struct Tarea *tarea);
+struct Tarea* BuscarTarea(struct Tarea **tarea,int cant, char *palabra);
+
 int main(){
     int cantTareas, gestion, aux=0;
     struct Tarea **tareaPendiente; //todo Doble puntero 
     struct Tarea **tareaRealizada;
-    char *buff;
+    char *buff, *palabra;
     /*  1. Desarrollar una interfaz por consola donde se solicite al usuario (es decir el
            empleado) cuantas tareas debe cargar.*/
 
@@ -73,31 +76,51 @@ int main(){
     printf("\n==============Tareas Realizadas=============\n");
     for (int i = 0; i < aux; i++)
     {
-        printf("\n-------------Tarea Realizada [%d]------------", i+1);
-        printf("\nTareaID: %d", tareaRealizada[i]->TareaID);
-        printf("\nDuracion: %d", tareaRealizada[i]->Duracion);
-        printf("\nDescripcion: %s", tareaRealizada[i]->Descripcion); 
-        printf("\n");
+        printf("\n--------------TareaRealizada [%d]------------", i+1);
+        mostrar(tareaRealizada[i]);
     }
+    
+    
     printf("\n============Tareas Pendientes=============\n");
     for (int i = 0; i < cantTareas; i++)
     {
         if (tareaPendiente[i]!=NULL)
         {
             printf("\n--------------TareaPendiente [%d]------------", i+1);
-            printf("\nTareaID: %d", tareaPendiente[i]->TareaID);
-            printf("\nduracion [%d]: %d", i+1, tareaPendiente[i]->Duracion); 
-            printf("\nDescripcion: %s", tareaPendiente[i]->Descripcion);
-            printf("\n");
+            mostrar(tareaPendiente[i]);
         }
     }
-    
-    
-    
+
+    //todo Apartado 7)
+    fflush(stdin);
+    printf("\nIngrese la Palabra: ");
+    gets(buff);
+
+    printf("\nLa Tarea es: ");
+    mostrar(BuscarTarea(tareaRealizada, aux, buff));
 
     
-
-
-
+    
     return 0;
+}
+
+void mostrar(struct Tarea *tarea){
+        printf("\nTareaID: %d", tarea->TareaID);
+        printf("\nDuracion: %d", tarea->Duracion);
+        printf("\nDescripcion: %s", tarea->Descripcion); 
+        printf("\n");   
+}
+/*BuscarTarea en donde la misma sea por palabra clave en vez de por Id. (uno
+le manda una palabra y te tiene que devolver la primera tarea que contenga
+dicha palabra)*/
+struct Tarea* BuscarTarea(struct Tarea **tarea,int cant, char *palabra){
+    struct Tarea *aux1 = NULL;
+    for (int i = 0; i < cant; i++)
+    {
+        if (strstr(tarea[i]->Descripcion, palabra) != NULL) // si la funcion es distinta del nulo entonces aparecio esa palabra
+        {
+            aux1 = tarea[i];
+        }
+    }
+    return aux1;
 }
