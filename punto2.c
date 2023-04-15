@@ -13,6 +13,8 @@ struct Tarea {
     int Duracion; // entre 10 – 100
 };
 
+struct Tarea BuscarTarea(struct Tarea **tarea, int cant,int id);
+
 int main(){
     int cantTareas, gestion, aux=0;
     struct Tarea **tareaPendiente; //todo Doble puntero 
@@ -92,12 +94,20 @@ int main(){
         }
     }
     
-    
-    
-
-    
-
-
-
     return 0;
+}
+
+/*implemente una función de búsqueda de tarea por nro. de id de nombre BuscarTarea. La misma devuelve
+la tarea solicitada. */
+struct Tarea BuscarTarea(struct Tarea **tarea, int cant,int id){ //? Recibe el id de la tarea a buscar
+    struct Tarea *aux = NULL; // inicializamos el puntero con Null
+    for (int i = 0; i < cant; i++)
+    {
+        if (tarea[i]->TareaID==id)
+        {
+            aux = tarea[i];
+        }
+    }
+    return *aux;
+    
 }
