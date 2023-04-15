@@ -14,10 +14,11 @@ struct Tarea {
 };
 
 void mostrar(struct Tarea *tarea);
-struct Tarea* BuscarTarea(struct Tarea **tarea,int cant, char *palabra);
+struct Tarea* BuscarTareaPalabra(struct Tarea **tarea,int cant, char *palabra);
+struct Tarea* BuscarTarea(struct Tarea **tarea, int cant,int id);
 
 int main(){
-    int cantTareas, gestion, aux=0;
+    int cantTareas, gestion, aux=0, id;
     struct Tarea **tareaPendiente; //todo Doble puntero 
     struct Tarea **tareaRealizada;
     char *buff, *palabra;
@@ -87,19 +88,49 @@ int main(){
         if (tareaPendiente[i]!=NULL)
         {
             printf("\n--------------TareaPendiente [%d]------------", i+1);
-            mostrar(tareaPendiente[i]);
+            if (tareaPendiente[i]!=NULL)
+            {
+                mostrar(tareaPendiente[i]);
+            }
+            
+            
         }
     }
 
+    //! Agregue una interfaz de usuario al programa principal que permita consultar tareas por id y palabra clave y mostrarlas por pantalla.
+
+    //todo Apartado 6)
+    printf("\n Ingrese el id de la tarea que desea buscar: ");    
+    scanf("%d", &id);
+    if (BuscarTarea(tareaPendiente, cantTareas, id)!=NULL)
+    {
+        mostrar(BuscarTarea(tareaPendiente, cantTareas, id));
+    }else
+    {
+        if (BuscarTarea(tareaRealizada, aux, id)!=NULL)
+        {
+            mostrar(BuscarTarea(tareaRealizada, aux, id));
+        }else
+        {
+            printf("\nNo existe esa tarea");
+        }     
+    }
     //todo Apartado 7)
     fflush(stdin);
     printf("\nIngrese la Palabra: ");
     gets(buff);
 
     printf("\nLa Tarea es: ");
-    mostrar(BuscarTarea(tareaRealizada, aux, buff));
 
+// mostrar(BuscarTareaPalabra(tareaPendiente, cantTareas, buff)); consultar error
+    if((BuscarTareaPalabra(tareaRealizada, aux, buff))==NULL){
+        printf("\nNo se encontro la palabra");
+    }else
+    {
+        mostrar(BuscarTareaPalabra(tareaRealizada, aux, buff));
+    }
     
+     
     
     return 0;
 }
@@ -113,7 +144,7 @@ void mostrar(struct Tarea *tarea){
 /*BuscarTarea en donde la misma sea por palabra clave en vez de por Id. (uno
 le manda una palabra y te tiene que devolver la primera tarea que contenga
 dicha palabra)*/
-struct Tarea* BuscarTarea(struct Tarea **tarea,int cant, char *palabra){
+struct Tarea* BuscarTareaPalabra(struct Tarea **tarea,int cant, char *palabra){
     struct Tarea *aux1 = NULL;
     for (int i = 0; i < cant; i++)
     {
@@ -123,4 +154,21 @@ struct Tarea* BuscarTarea(struct Tarea **tarea,int cant, char *palabra){
         }
     }
     return aux1;
+}
+/*implemente una función de búsqueda de tarea por nro. de id de nombre BuscarTarea. La misma devuelve
+la tarea solicitada. */
+struct Tarea* BuscarTarea(struct Tarea **tarea, int cant,int id){ //? Recibe el id de la tarea a buscar
+    struct Tarea *aux = NULL; // inicializamos el puntero con Null
+    for (int i = 0; i < cant; i++)
+    {
+        if (tarea[i]!=NULL)
+        {
+           if (tarea[i]->TareaID==id)
+            {
+                aux = tarea[i];
+            }
+        }
+    }
+    return aux;
+    
 }
